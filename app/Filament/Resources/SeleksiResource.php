@@ -12,6 +12,12 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Pages\Actions\Action;
+use Filament\Notifications\Notification; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use App\Models\Periode;
 
 class SeleksiResource extends Resource
 {
@@ -25,9 +31,12 @@ class SeleksiResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('id_periode')
                     ->label('Periode')
-                    ->required()
-                    ->numeric()
-                    ->minValue(2023),
+                    ->default(Periode::where("aktif",1)->pluck('id')->first())
+                    ->disabled(),
+                    
+                
+                    //->numeric()
+                    //->minValue(2023),
                   
                 Forms\Components\TextInput::make('tahap')
                     ->label('Tahap')
@@ -84,5 +93,29 @@ class SeleksiResource extends Resource
             'create' => Pages\CreateSeleksi::route('/create'),
             'edit' => Pages\EditSeleksi::route('/{record}/edit'),
         ];
-    }    
+    } 
+        //     public function mount(): void
+        // {
+        // //tolak akses halaman jika user tidak memiliki role 'Pendaftar'
+        // abort_unless(
+        // Auth::user()->hasRole('Admin'), 
+        // 403
+        // );
+        // //ambil periode aktif
+        // $periode = Periode::where("aktif",1)->first();
+        // //ambil data formulir dari periode dan user yang login
+        // // $seleksi = Seleksi::where("id_periode", $periode->id)
+        // // ->where("id_user", Auth::user()->id)
+        // // ->first();
+        // //jika tidak ada data formulir, maka buat data awal periode dan nama
+        // if (!$seleksi) {
+        // $data_awal = [
+        // 'id_periode' => $periode->id,
+        // 'nama' => Auth::user()->name
+        // ];
+        // } else {
+        // $data_awal = $seleksi ->toArray(); //data awal pakai data di database
+        // }
+        // $this->form->fill($data_awal); //data awal dimasukkan ke form
+        // }
 }
