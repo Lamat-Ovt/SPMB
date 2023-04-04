@@ -73,6 +73,14 @@ class SeleksiResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+
+                Tables\Actions\Action::make('Peserta')
+                ->icon('heroicon-s-user-group')
+                ->url(function (Seleksi $record){
+                    return SeleksiResource::getUrl('peserta', $record);
+                })
+
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -92,6 +100,7 @@ class SeleksiResource extends Resource
             'index' => Pages\ListSeleksis::route('/'),
             'create' => Pages\CreateSeleksi::route('/create'),
             'edit' => Pages\EditSeleksi::route('/{record}/edit'),
+            'peserta' => Pages\PesertaSeleksi::route('/{record}/peserta'),
         ];
     } 
         //     public function mount(): void
